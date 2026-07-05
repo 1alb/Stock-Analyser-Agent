@@ -1,0 +1,1298 @@
+{
+  "name": "Stock Analyzer-3",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1520,
+        -16
+      ],
+      "id": "1700352a-3b26-4f12-9b23-fb0118db3da4",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      run: true\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1232,
+        -16
+      ],
+      "id": "9dfc8cbb-6302-48ea-858d-e5b6f3d644a7",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7da89fd4-a039-4d7e-8f23-db7dfca99a28",
+              "leftValue": "={{ $json.run }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -928,
+        -16
+      ],
+      "id": "9e25cda8-e6b7-4e7a-868c-1d3ed700b325",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "09070c1f-27dc-48a9-b9aa-8bd0f86271aa",
+              "name": "Symbol",
+              "value": "={{$json.meta.symbol}}",
+              "type": "string"
+            },
+            {
+              "id": "d9eb2ceb-1407-4726-9480-0d9fd979ff26",
+              "name": "Date",
+              "value": "={{$json.values[0].datetime}}",
+              "type": "string"
+            },
+            {
+              "id": "f46ba95b-442f-4083-83ef-d8c9275fd67b",
+              "name": "Open",
+              "value": "={{$json.values[0].open}}",
+              "type": "string"
+            },
+            {
+              "id": "8e629f18-46bc-4f4b-8e15-4be9563973b7",
+              "name": "High",
+              "value": "={{$json.values[0].high}}",
+              "type": "string"
+            },
+            {
+              "id": "ef211fc8-860a-470d-8a29-b951aa2d9415",
+              "name": "Low",
+              "value": "={{$json.values[0].low}}",
+              "type": "string"
+            },
+            {
+              "id": "13f81469-ff65-49a3-b9d3-32bdd35776a1",
+              "name": "Close",
+              "value": "={{$json.values[0].close}}",
+              "type": "string"
+            },
+            {
+              "id": "534ae41d-97d3-42f6-a64a-1fca16321153",
+              "name": "Volume",
+              "value": "={{$json.values[0].volume}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -368,
+        -16
+      ],
+      "id": "412ee584-3bf8-4f79-b5a0-29fd27ec38a1",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "const stock = \"TCS\";\nconst buy = 3500;\nconst qty = 10;\nconst current = 3570;\n\nconst profit = (current - buy) * qty;\n\nreturn [\n{\njson:{\nstock,\nbuy,\nqty,\ncurrent,\nprofit\n}\n}\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        192,
+        16
+      ],
+      "id": "903b8463-58f8-4633-9c1f-c988c4756eb5",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      index: \"SENSEX\",\n      currentValue: 82654.40,\n      change: 245.32,\n      percentChange: 0.30,\n      open: 82410.20,\n      high: 82740.50,\n      low: 82380.60,\n      previousClose: 82409.08,\n      volume: 1854321,\n      trend: \"Bullish\",\n      time: \"2026-07-05 15:30:00\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        848,
+        32
+      ],
+      "id": "94c0eefe-c74f-4b36-b06a-eb88bcb16f92",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "url": "=https://query1.finance.yahoo.com/v8/finance/chart/RELIANCE.NS",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "interval",
+              "value": "1m"
+            },
+            {
+              "name": "range",
+              "value": "1d"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1280,
+        32
+      ],
+      "id": "bb2057ef-908b-4687-a5b4-7af15db760ca",
+      "name": "Get Live Price1"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      index: \"NIFTY 50\",\n      currentValue: 25240.75,\n      change: 135.45,\n      percentChange: 0.54,\n      open: 25110.30,\n      high: 25280.90,\n      low: 25095.60,\n      previousClose: 25105.30,\n      volume: 24567890,\n      trend: \"Bullish\",\n      time: \"2026-07-05 15:30:00\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1520,
+        48
+      ],
+      "id": "bad2d521-0838-4bfb-862e-6c9d8f5f6202",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "18ePuWf-Q-kA-NZx9BFfwjRGMT4aigFfGZ9nYg42OCGs",
+          "mode": "list",
+          "cachedResultName": "Stock Market Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18ePuWf-Q-kA-NZx9BFfwjRGMT4aigFfGZ9nYg42OCGs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Stocks",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18ePuWf-Q-kA-NZx9BFfwjRGMT4aigFfGZ9nYg42OCGs/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -80,
+        16
+      ],
+      "id": "c5a78a38-b610-4859-ae7c-76eb67678478",
+      "name": "Stock Market Data",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZGrOS6ZIK5uT83EM",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "17L7EDqjVeccUZuE5dAn5EiaSVfko2UZwNdOY084mz1A",
+          "mode": "list",
+          "cachedResultName": "Portfolio",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17L7EDqjVeccUZuE5dAn5EiaSVfko2UZwNdOY084mz1A/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17L7EDqjVeccUZuE5dAn5EiaSVfko2UZwNdOY084mz1A/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        352,
+        16
+      ],
+      "id": "976ae1ff-c51f-4113-9f85-333c7b286d91",
+      "name": "Portfolio",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZGrOS6ZIK5uT83EM",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1Wns7OaNt05cIB8_zb619H4IwLipQY1_B1IXWpGmOkIc",
+          "mode": "list",
+          "cachedResultName": "Sensex",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Wns7OaNt05cIB8_zb619H4IwLipQY1_B1IXWpGmOkIc/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Wns7OaNt05cIB8_zb619H4IwLipQY1_B1IXWpGmOkIc/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "chart"
+          ],
+          "schema": [
+            {
+              "id": "chart",
+              "displayName": "chart",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "index",
+              "displayName": "index",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "currentValue",
+              "displayName": "currentValue",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "change",
+              "displayName": "change",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "percentChange",
+              "displayName": "percentChange",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "open",
+              "displayName": "open",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "high",
+              "displayName": "high",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "low",
+              "displayName": "low",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "previousClose",
+              "displayName": "previousClose",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "volume",
+              "displayName": "volume",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "trend",
+              "displayName": "trend",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "time",
+              "displayName": "time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1024,
+        16
+      ],
+      "id": "e2d5ff10-6180-466c-a527-22c8a193c72c",
+      "name": "Sensex",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZGrOS6ZIK5uT83EM",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "15Vp7g5UuDONOKoKsRTHaPvqso5-PcKz5xJnMRzOZzPY",
+          "mode": "list",
+          "cachedResultName": "Nifty",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15Vp7g5UuDONOKoKsRTHaPvqso5-PcKz5xJnMRzOZzPY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15Vp7g5UuDONOKoKsRTHaPvqso5-PcKz5xJnMRzOZzPY/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "index",
+              "displayName": "index",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "currentValue",
+              "displayName": "currentValue",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "change",
+              "displayName": "change",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "percentChange",
+              "displayName": "percentChange",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "open",
+              "displayName": "open",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "high",
+              "displayName": "high",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "low",
+              "displayName": "low",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "previousClose",
+              "displayName": "previousClose",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "volume",
+              "displayName": "volume",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "trend",
+              "displayName": "trend",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "time",
+              "displayName": "time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1728,
+        48
+      ],
+      "id": "5956b5ae-d09d-40ab-b785-4f68231af1b9",
+      "name": "Nifty",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZGrOS6ZIK5uT83EM",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      stock: \"TCS\",\n      buyPrice: 3500,\n      currentPrice: 3570,\n      quantity: 10,\n      profitLoss: (3570 - 3500) * 10,\n      status: \"Profit\"\n    }\n  },\n  {\n    json: {\n      stock: \"INFY\",\n      buyPrice: 1650,\n      currentPrice: 1600,\n      quantity: 15,\n      profitLoss: (1600 - 1650) * 15,\n      status: \"Loss\"\n    }\n  },\n  {\n    json: {\n      stock: \"RELIANCE\",\n      buyPrice: 2950,\n      currentPrice: 3015,\n      quantity: 8,\n      profitLoss: (3015 - 2950) * 8,\n      status: \"Profit\"\n    }\n  },\n  {\n    json: {\n      stock: \"HDFCBANK\",\n      buyPrice: 1780,\n      currentPrice: 1755,\n      quantity: 20,\n      profitLoss: (1755 - 1780) * 20,\n      status: \"Loss\"\n    }\n  },\n  {\n    json: {\n      stock: \"ICICIBANK\",\n      buyPrice: 1420,\n      currentPrice: 1455,\n      quantity: 12,\n      profitLoss: (1455 - 1420) * 12,\n      status: \"Profit\"\n    }\n  },\n  {\n    json: {\n      stock: \"SBIN\",\n      buyPrice: 890,\n      currentPrice: 875,\n      quantity: 25,\n      profitLoss: (875 - 890) * 25,\n      status: \"Loss\"\n    }\n  },\n  {\n    json: {\n      stock: \"LT\",\n      buyPrice: 3850,\n      currentPrice: 3925,\n      quantity: 5,\n      profitLoss: (3925 - 3850) * 5,\n      status: \"Profit\"\n    }\n  },\n  {\n    json: {\n      stock: \"AXISBANK\",\n      buyPrice: 1180,\n      currentPrice: 1160,\n      quantity: 18,\n      profitLoss: (1160 - 1180) * 18,\n      status: \"Loss\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1136,
+        224
+      ],
+      "id": "8fffd1c4-3970-4a63-9ae9-2f9b6e436ed7",
+      "name": "Code in JavaScript4"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -560,
+        240
+      ],
+      "id": "62d10b52-2402-432a-a240-6c0a7d2ab3b5",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a stock market analyst.\n\nAnalyze the following stock market data.\n\nProfit & Loss:\n{{$item(0).$node[\"Code in JavaScript4\"].json}}\n\n\n\nNIFTY:\n\n{{ $('Nifty').item.json.index }}\n\nSENSEX:\n\n{{ $('Sensex').item.json.index }}\n\nProfit/Loss:\n\n{{$node[\"Code in JavaScript4\"].json}}\n\nGenerate a report with the following sections:\n\n1. Overall Market Trend\n2. NIFTY Summary\n3. SENSEX Summary\n4. Portfolio Performance\n5. Top Gainer\n6. Top Loser\n7. Investment Suggestion\n\nKeep the report under 100 words."
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "maxOutputTokens": 300,
+          "temperature": 0.3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        -352,
+        240
+      ],
+      "id": "db1b2fe7-b614-4827-bdde-204398436551",
+      "name": "Message a model",
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 3000,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "5c9894bGqJZLG79v",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Sample Stock Market Data\n\nconst stocks = [\n  {\n    stock: \"TCS\",\n    sector: \"IT\",\n    buyPrice: 3500,\n    currentPrice: 3570,\n    quantity: 10\n  },\n  {\n    stock: \"Infosys\",\n    sector: \"IT\",\n    buyPrice: 1620,\n    currentPrice: 1655,\n    quantity: 15\n  },\n  {\n    stock: \"Reliance\",\n    sector: \"Energy\",\n    buyPrice: 2980,\n    currentPrice: 3045,\n    quantity: 8\n  },\n  {\n    stock: \"HDFC Bank\",\n    sector: \"Banking\",\n    buyPrice: 1895,\n    currentPrice: 1928,\n    quantity: 12\n  },\n  {\n    stock: \"ICICI Bank\",\n    sector: \"Banking\",\n    buyPrice: 1430,\n    currentPrice: 1452,\n    quantity: 20\n  },\n  {\n    stock: \"L&T\",\n    sector: \"Infrastructure\",\n    buyPrice: 3650,\n    currentPrice: 3715,\n    quantity: 5\n  },\n  {\n    stock: \"Bharti Airtel\",\n    sector: \"Telecom\",\n    buyPrice: 1985,\n    currentPrice: 2020,\n    quantity: 10\n  },\n  {\n    stock: \"Sun Pharma\",\n    sector: \"Pharma\",\n    buyPrice: 1760,\n    currentPrice: 1730,\n    quantity: 18\n  }\n];\n\n// Calculate Profit/Loss\n\nreturn stocks.map(stock => {\n\n    const profitLoss =\n        (stock.currentPrice - stock.buyPrice) *\n        stock.quantity;\n\n    return {\n        json: {\n            stock: stock.stock,\n            sector: stock.sector,\n            buyPrice: stock.buyPrice,\n            currentPrice: stock.currentPrice,\n            quantity: stock.quantity,\n            investedAmount: stock.buyPrice * stock.quantity,\n            currentValue: stock.currentPrice * stock.quantity,\n            profitLoss: profitLoss,\n            status: profitLoss >= 0 ? \"Profit\" : \"Loss\",\n            percentReturn:\n                (\n                    ((stock.currentPrice - stock.buyPrice) /\n                    stock.buyPrice) * 100\n                ).toFixed(2) + \"%\",\n            recommendation:\n                profitLoss > 500\n                    ? \"Strong Buy\"\n                    : profitLoss > 0\n                    ? \"Hold\"\n                    : \"Review\"\n        }\n    };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        0
+      ],
+      "id": "a24c9e48-1f1b-4760-9fd1-4a92f6636dae",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1Nt4IRiudeWZSoB9eoFgLu4mju31hs599uhRVoAwI3KY",
+          "mode": "list",
+          "cachedResultName": "Profit & Loss",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Nt4IRiudeWZSoB9eoFgLu4mju31hs599uhRVoAwI3KY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Nt4IRiudeWZSoB9eoFgLu4mju31hs599uhRVoAwI3KY/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "stock",
+              "displayName": "stock",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "buyPrice",
+              "displayName": "buyPrice",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "currentPrice",
+              "displayName": "currentPrice",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "quantity",
+              "displayName": "quantity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "profitLoss",
+              "displayName": "profitLoss",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -928,
+        224
+      ],
+      "id": "07ab08bf-111b-4cbc-a88c-9c90470b5e5d",
+      "name": "Profit & Loss",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ZGrOS6ZIK5uT83EM",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://query1.finance.yahoo.com/v8/finance/chart/RELIANCE.NS",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "interval",
+              "value": "1m"
+            },
+            {
+              "name": "range",
+              "value": "1d"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -1472,
+        256
+      ],
+      "id": "3d89abe3-dbe4-49dd-8cbe-d3b5f007ba48",
+      "name": "Get Live Price"
+    },
+    {
+      "parameters": {
+        "sendTo": "monishagaur02042004@gmail.com",
+        "subject": "Daily Stock Market Report",
+        "message": "=Hello,\n\nHere is today's Stock Market Report.\n\n{{$node[\"Message a model\"].json.text}}\n\nRegards,\nn8n Stock Analyzer",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": []
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        240
+      ],
+      "id": "766cebce-7f78-4191-9fde-c7d0eb6b4556",
+      "name": "Send a message",
+      "webhookId": "3577763e-ff0c-4f53-afca-c19d98380870",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "fo3ZNsl9kBpeR3Vs",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://quickchart.io/chart",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"width\": 900,\n  \"height\": 450,\n  \"format\": \"png\",\n  \"chart\": {\n    \"type\": \"line\",\n    \"data\": {\n      \"labels\": [\"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\"],\n      \"datasets\": [\n        {\n          \"label\": \"Stock Price\",\n          \"data\": [100, 105, 102, 108, 112]\n        }\n      ]\n    }\n  }\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "chartImage"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -624,
+        -32
+      ],
+      "id": "1f6299e1-26f5-4851-a36f-e86adcf0df8b",
+      "name": "HTTP Request-1"
+    },
+    {
+      "parameters": {
+        "url": "https://query1.finance.yahoo.com/v8/finance/chart/%5ENSEI",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        608,
+        16
+      ],
+      "id": "a84a7962-353a-461e-bd0a-6f9d645f2e23",
+      "name": "HTTP Request-4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://quickchart.io/chart",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"width\": 1000,\n  \"height\": 500,\n  \"format\": \"png\",\n  \"chart\": {\n    \"type\": \"bar\",\n    \"data\": {\n      \"labels\": [\n        \"Buy Price\",\n        \"Current Price\",\n        \"Profit/Loss\",\n        \"Quantity\"\n      ],\n      \"datasets\": [\n        {\n          \"label\": \"{{$json.stock}}\",\n          \"data\": [\n            {{$json.buyPrice}},\n            {{$json.currentPrice}},\n            {{$json.profitLoss}},\n            {{$json.quantity}}\n          ]\n        }\n      ]\n    },\n    \"options\": {\n      \"plugins\": {\n        \"title\": {\n          \"display\": true,\n          \"text\": \"Stock Market Dashboard\"\n        }\n      }\n    }\n  }\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "chartImage"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        64,
+        -112
+      ],
+      "id": "8315f063-1ee0-4c7a-9c71-dec839a43e83",
+      "name": "Stock Market Data Graph HTTP Request-2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://quickchart.io/chart",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"width\": 900,\n  \"height\": 450,\n  \"format\": \"png\",\n  \"chart\": {\n    \"type\": \"bar\",\n    \"data\": {\n      \"labels\": [\n        \"TCS\",\n        \"Infosys\",\n        \"Reliance\",\n        \"HDFC\",\n        \"ICICI\",\n        \"L&T\",\n        \"Airtel\",\n        \"Sun Pharma\"\n      ],\n      \"datasets\": [\n        {\n          \"label\": \"Current Price\",\n          \"data\": [\n            3570,\n            1655,\n            3045,\n            1928,\n            1452,\n            3715,\n            2020,\n            1730\n          ]\n        }\n      ]\n    }\n  }\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "chartImage"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        480,
+        -112
+      ],
+      "id": "8f3b0cf4-7c01-4417-bcbb-7a7d6630a311",
+      "name": "Portfolio Graph HTTP Request-3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://quickchart.io/chart",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"width\": 900,\n  \"height\": 450,\n  \"format\": \"png\",\n  \"chart\": {\n    \"type\": \"line\",\n    \"data\": {\n      \"labels\": [\n        \"9:15\",\n        \"10:00\",\n        \"11:00\",\n        \"12:00\",\n        \"1:00\",\n        \"2:00\",\n        \"3:30\"\n      ],\n      \"datasets\": [\n        {\n          \"label\": \"Sensex\",\n          \"data\": [\n            82150,\n            82220,\n            82310,\n            82420,\n            82520,\n            82610,\n            82654\n          ]\n        }\n      ]\n    }\n  }\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "chartImage"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1136,
+        -144
+      ],
+      "id": "0aa1aafd-634e-4d8c-826e-41a6ef6c0585",
+      "name": "Sensex HTTP Request-5"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://quickchart.io/chart",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"width\": 900,\n  \"height\": 450,\n  \"format\": \"png\",\n  \"chart\": {\n    \"type\": \"line\",\n    \"data\": {\n      \"labels\": [\n        \"9:15\",\n        \"10:00\",\n        \"11:00\",\n        \"12:00\",\n        \"1:00\",\n        \"2:00\",\n        \"3:30\"\n      ],\n      \"datasets\": [\n        {\n          \"label\": \"NIFTY\",\n          \"data\": [\n            25080,\n            25100,\n            25150,\n            25200,\n            25220,\n            25235,\n            25240\n          ]\n        }\n      ]\n    }\n  }\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "chartImage"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -1696,
+        272
+      ],
+      "id": "37771f0d-50b1-4f90-a2a6-0692884ec0ce",
+      "name": "Nifty HTTP Request-6"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://quickchart.io/chart",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"width\": 900,\n  \"height\": 450,\n  \"format\": \"png\",\n  \"chart\": {\n    \"type\": \"bar\",\n    \"data\": {\n      \"labels\": [\n        \"TCS\",\n        \"Infosys\",\n        \"Reliance\",\n        \"HDFC\",\n        \"ICICI\",\n        \"L&T\",\n        \"Airtel\",\n        \"Sun Pharma\"\n      ],\n      \"datasets\": [\n        {\n          \"label\": \"Profit / Loss\",\n          \"data\": [\n            700,\n            525,\n            520,\n            396,\n            440,\n            325,\n            350,\n            -540\n          ]\n        }\n      ]\n    }\n  }\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "chartImage"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -768,
+        336
+      ],
+      "id": "c2374dbd-297f-4d58-be5e-82a409cc469a",
+      "name": "Profit & Loss Graph HTTP Request-7"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request-1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Portfolio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Sensex",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Live Price1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Nifty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stock Market Data": {
+      "main": [
+        [
+          {
+            "node": "Stock Market Data Graph HTTP Request-2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Portfolio": {
+      "main": [
+        [
+          {
+            "node": "Portfolio Graph HTTP Request-3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sensex": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Sensex HTTP Request-5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nifty": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 2
+          },
+          {
+            "node": "Nifty HTTP Request-6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "Profit & Loss",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Stock Market Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Profit & Loss": {
+      "main": [
+        [
+          {
+            "node": "Profit & Loss Graph HTTP Request-7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Live Price": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request-1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request-4": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stock Market Data Graph HTTP Request-2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Portfolio Graph HTTP Request-3": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request-4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sensex HTTP Request-5": {
+      "main": [
+        [
+          {
+            "node": "Get Live Price1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Nifty HTTP Request-6": {
+      "main": [
+        [
+          {
+            "node": "Get Live Price",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Profit & Loss Graph HTTP Request-7": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "1a101124-596c-4243-a839-b69f5fbdf7fb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3e3c15f07a24283824bf7748ffcb8373586e8971261878aa67c25e140aca677d"
+  },
+  "nodeGroups": [],
+  "id": "q50bepwGkvSGzFCP",
+  "tags": []
+}
